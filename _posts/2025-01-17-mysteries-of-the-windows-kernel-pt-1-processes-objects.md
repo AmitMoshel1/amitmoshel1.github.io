@@ -98,7 +98,7 @@ For more details, refer to [Windows Kernel Programming - Second Edition](https:/
 
 ### Access Token
 
-The **Access Token** determines the process’s level of privilege and access to Windows resources. Every process has a main access token, which threads inherit during execution. Threads may use a different access token via **Token Impersonation**.
+The **Access Token** is used by the Operating System to determine the process’s level of privilege and access to Windows resources. Every process has a main access token, which threads inherit during execution. Threads may use a different access token via **Token Impersonation**.
 
 ### Threads
 
@@ -108,10 +108,10 @@ Threads are the units of execution within a process. A process must have at leas
 
 The **Memory Manager** maintains a hierarchical tree of **Virtual Address Descriptors (VADs)** to track virtual address space ranges allocated to a process. VADs store information such as:
 
-- Protection (Execute, Read, Write)
-- Allocated address ranges
-- State (Committed/Reserved)
-- Memory type
+- **Protection** (Execute, Read, Write)
+- **Allocated address ranges**
+- **State** (**Committed**/**Reserved**)
+- **Memory type**
 
 ## Viewing Processes in Kernel Debugging with WinDbg
 
@@ -153,13 +153,21 @@ Let’s take the `lsass.exe` process as an example. The output might include:
 ![img-description](https://miro.medium.com/v2/resize:fit:828/format:webp/1*nh2JxvJs7WO56JkE091Yxg.png)
 
 - **`PROCESS ffffaf874da020c0`** — The `EPROCESS` kernel address for `lsass.exe`.
+
 - **`SessionId`** — The session in which the process runs (e.g., Session 0).
+
 - **`Cid`** — Client ID (Process ID).
+
 - **`Peb`** — A link to the user-mode PEB structure.
+
 - **`ParentCid`** — Parent Process ID.
+
 - **`Dirbase`** — Used by the Memory Manager for address translation.
+
 - **`ObjectTable`** — Address of the process’s handle table (`_HANDLE_TABLE` structure).
+
 - **`HandleCount`** — Total number of handles to kernel objects.
+  
 - **`Image`** — The PE image the process runs.
 
 To get more detailed information, increase the detail level to 7:
@@ -195,9 +203,9 @@ This command switches the debugger’s context to the specified process, reloads
 
 ### Viewing Raw EPROCESS Structure
 
-The **“!process”** is an extension command which prettifies the information shown in the **`“EPROCESS”`** structure within the executive subsystem.
+The **`!process`** is an extension command which prettifies the information shown in the **`_EPROCESS`** structure within the executive subsystem.
 
-If we want to view the raw structure of the **`EPROCESS`** of the **`lsass.exe`**, we’ll execute the following command:
+If we want to view the raw structure of the **`_EPROCESS`** of the **`lsass.exe`**, we’ll execute the following command:
 “dt nt!_eprocess ffffaf874da020c0“
 
 ```cmd
@@ -211,8 +219,8 @@ This structure is much bigger than shown in the image and holds all of the infor
 #### Key Fields in `_EPROCESS`
 
 - **`ActiveProcessLinks`** — Doubly-linked list connecting all `EPROCESS` structures in the system. The head resides in `PsActiveProcessHead`.
-- **`Protection`** — Process protection level (e.g., Protected Process Light).
-- **`ObjectTable`** — Address of the process’s handle table.
+- **`Protection`** — Process protection level (e.g., **Protected Process Light**).
+- **`ObjectTable`** — Address of the process’s **handle table**.
 - **`PEB`** — The Process Environment Block (user-mode structure).
 
 To view the `PEB` structure, switch the debugger’s context:
@@ -249,14 +257,22 @@ Let’s break down some of the important fields within this structure:
 - **`TypeList`** - Doubly-linked list connecting all objects of this type.
   
 - **`Name`** - Name of the object type, stored as a “UNICODE_STRING” structure.
+  
 - **`DefaultObject`** - Pointer to a default object of this type.
+
 - **`Index`** - Index or identifier for the object type.
+  
 - **`TotalNumberOfObjects`** Total number of objects of this type currently in the system.
+
 - **`TotalNumberOfHandles`** - Total number of handles to objects of this type currently in the system.
+
 - **`HighWaterNumberOfObjects`** - Maximum number of objects of this type within the entire system.
+
 - **`HighWaterNumberOfHandles`** - Maximum number of handles to objects of this type within the
 entire system.
+
 - **`Key`**: Unique identifier for this object type.
+
 - **`CallbackList`** - Doubly linked List of callbacks registered for this object type. Callbacks are routines (functions) that are registered for a specific events that can occur during the object’s lifetime. For example, a callback routine can be registered to an event such process creation. This means that a certain routine can be executed when a process is being created.
 
 We can also see that there is another address of **“objectHeader”**, which is also an address to an **`_OBJECT_HEADER`** structure. To view the **`_OBJECT_HEADER`** structure of that object we’ll execute the following command:
@@ -273,7 +289,7 @@ Let’s explain the main fields within it:
   
 - **`HandleCount`** — The amount of handles to other objects this object has.
   
-- **`SecurityDescriptor`** — Holds a pointer to the **security descriptor** associated with this kernel object. The **security descriptor** contains information such as the object’s owner, group, **`DACL`** (**Discretionary Access Control List**), and **`SACL`**(**System Access Control Lis**t).
+- **`SecurityDescriptor`** — Holds a pointer to the **security descriptor** associated with this kernel object. The **security descriptor** contains information such as the object’s owner, group, **`DACL`** (**Discretionary Access Control List**), and **`SACL`** (**System Access Control Lis**t).
  
 We can view this information by using the **`!sd`** command and changing the last **`0xf`** flag of the pointer to **0**:
 
@@ -284,7 +300,7 @@ We can view this information by using the **`!sd`** command and changing the las
 ![img-description](https://miro.medium.com/v2/resize:fit:828/format:webp/1*XtxpKnLWId9T_0ubcNPL4w.png)
 
 
-It’s important to note that the “!object” command works not only on “Process” objects but on every other “Kernel Object” available on the system.
+It’s important to note that the **`!object`** command works not only on “Process” objects but on every other **“Kernel Object”** available on the system.
 
 ---
 
