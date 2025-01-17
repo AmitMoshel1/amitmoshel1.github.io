@@ -99,7 +99,7 @@ cdn: "https://chirpy-img.netlify.app"
 
 # the avatar on sidebar, support local or CORS resources
 #avatar: "/commons/avatar.jpg"
-avatar: https://amitmoshel1.github.io/assets/img/favicons/linkedinImage.jpeg"
+avatar: https://avatars.githubusercontent.com/u/124504250?s=400&u=b2d6ca74e9287776761f102cdb8063543940cf96&v=4
 
 # The URL of the site-wide social preview image used in SEO `og:image` meta tag.
 # It can be overridden by a customized `page.image` in front matter.
