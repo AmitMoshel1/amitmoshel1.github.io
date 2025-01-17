@@ -45,7 +45,7 @@ To identify which manager a function belongs to, the function names are prefixed
 
 ### Kernel Objects
 
-The kernel defines its main components as **Kernel Objects**. The best definition for a kernel object is a **"runtime instance of a static structure."** Examples of kernel objects include:
+The kernel defines its main components as **Kernel Objects**. The best definition I found for a kernel object is a **"runtime instance of a static structure."** Examples of kernel objects include:
 
 - **Processes**
 - **Threads**
@@ -88,11 +88,11 @@ The size of the address space varies between architectures:
 ![img-description](https://miro.medium.com/v2/resize:fit:828/format:webp/1*qp-DrbJ0_V9mJ8zobafFLQ.png)
 
 - **32-bit architecture:**
-  - 2 GB of user-mode address space (4 GB if the `LARGEADDRESSAWARE` attribute is enabled).
-  - 2 GB of kernel space.
+  - Each process has 2 GB of user-mode address space (4 GB if the `LARGEADDRESSAWARE` attribute is enabled).
+  - Kernel-Mode has 2 GB of kernel space.
 - **64-bit architecture:**
-  - 128 TB of user-mode address space.
-  - 128 TB of kernel space.
+  - Each process has 128 TB of user-mode address space.
+  - Kernel-Mode has 128 TB of kernel space.
 
 For more details, refer to [Windows Kernel Programming - Second Edition](https://leanpub.com/windowskernelprogrammingsecondedition).
 
