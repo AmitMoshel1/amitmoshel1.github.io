@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Mysteries of the Windows Kernel Pt.1 - Processes & Objects
-date: 2025-01-17 22:14 +0200
+date: 2024-02-10 22:14 +0200
 ---
 
 Hello everyone,
@@ -300,10 +300,9 @@ We can view this information by using the **`!sd`** command and changing the las
 ![img-description](https://miro.medium.com/v2/resize:fit:828/format:webp/1*XtxpKnLWId9T_0ubcNPL4w.png)
 
 
-It’s important to note that the **`!object`** command works not only on “Process” objects but on every other **“Kernel Object”** available on the system.
+It’s important to note that the **`!object`** command works not only on **“Process”** objects but on every other **“Kernel Object”** available on the system.
 
 ---
 
 That would be it for part 1 of the series of articles. Obviously this topic is much much larger to summarize in one article.
-
 In the next part of the series I’ll touch more in depth about threads within the kernel and how the relation between threads and CPUs come into play within the windows.
