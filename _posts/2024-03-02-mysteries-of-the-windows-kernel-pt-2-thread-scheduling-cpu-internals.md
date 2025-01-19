@@ -12,16 +12,16 @@ In this article, we’ll explore what a thread is, its components, how threads r
 
 ## What is a Thread?
 
-A **thread** is a unit of execution that operates under a certain process. It is considered a **Dispatcher Kernel Object** (also known as a "Waitable Object," which we’ll explore in depth later).
+A **thread** is a unit of execution that operates under a certain process. It is considered a **Dispatcher Kernel Object** (also known as a **"Waitable Object"**, which we’ll explore in depth later).
 
 A thread primarily consists of the following components:
 - **Access Token**: Can be inherited from the process or impersonate another user's token.
 
-- **Priority**: Includes Base Priority and Dynamic Priority (explained later).
+- **Priority**: Includes **Base Priority** and **Dynamic Priority** (explained later).
 
 - **Context**: Also explained later.
 
-- **State**: Could be one of the following - Waiting, Running, Ready, Standby.
+- **State**: Could be one of the following - **Waiting**, **Running**, **Ready**, **Standby**.
 
 - **Affinity**
 
