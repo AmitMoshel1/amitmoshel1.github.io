@@ -563,6 +563,7 @@ For starting a driver project in Visual Studio, we’ll need to download WDK (Wi
 <https://learn.microsoft.com/en-us/windows-hardware/drivers/download-the-wdk>
 
 
+## Driver Development - Demo
 
 After downloading and installing it in Visual Studio, we’ll open an **“Empty WDM Driver”**, and create a **“.cpp”** file which will hold the code for the driver.
 Now, we’ll include **“ntddk.h”** which holds the **“Driver Development Kit”** set of kernel functions within it, and starts to initialize the **“DriverEntry()”** function, which is the entry function of every driver:
@@ -1191,7 +1192,7 @@ We’re currently at the start of the **“DeviceControlHandler()”** IOCTL han
 
 Now, because this is a dispatch routine, every dispatch routine has it’s first argument to be a pointer to the **“_DEVICE_OBJECT”** structure of the **“Device Object”**, and the second argument to be the base address of the **“_IRP”** structure of the IRP. In the x64 calling convention, we know that the first argument to a function is being passed in the **“rcx”** register, and the second argument is being passed in the **“rdx”** register.
 
-This means that a pointer to the current IRP structure (which is a request to the **“IOCTL_METHOD_BUFFERED”) resides in the **“rdx”** register.
+This means that a pointer to the current **`IRP`** structure (which is a request to the **`IOCTL_METHOD_BUFFERED`**) resides in the **“rdx”** register.
 We can confirm it by executing the following command:
 ```c++
 dt nt!_IRP @rdx
@@ -1216,6 +1217,7 @@ which displays information about a driver:
 !drvobj \Driver\DemoDriver
 ```
 
+![img-description](https://miro.medium.com/v2/resize:fit:828/format:webp/1*Djl-XPDeWXe5raUANSHFqA.png)
 
 This gives 2 basic details:
 - A pointer to the **`_DRIVER_OBJECT`** structure of the driver
