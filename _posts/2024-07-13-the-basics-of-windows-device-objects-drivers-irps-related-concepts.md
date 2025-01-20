@@ -577,13 +577,13 @@ NTSTATUS DriverEntry(PDRIVER_OBJECT DriverObject, PUNICODE_STRING RegistryPath)
 
 The **“DriverEntry()”** function returns a **NTSTATUS** value, and to avoid name mangling in C++, we’ll need to tell the compiler to treat it as a **“C”** function where there will be no name mangling by declaring an extern **“C”** on the function.
 
-The **“DriverEntry()”** also receives 2 arguments:
+The **`DriverEntry()`** also receives 2 arguments:
 - **`PDRIVER_OBJECT DriverObject`** — The base address pointer to the **“DRIVER_OBJECT”** structure, which represents the driver in kernel space.
 
 - **`PUNICODE_STRING RegistryPath`** — Drivers that are registered holds configuration within the registry that will help the Operating System to load the driver at initialization.
 
 The registry path is at:
-`“HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\<DriverName>”`
+`HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\<DriverName>`
 and it holds the following arguments:
 - **`ImagePath`**: Specifies the path to the driver’s executable.
 - **`Type`**: Indicates the type of service (e.g., kernel-mode driver, file system driver).
