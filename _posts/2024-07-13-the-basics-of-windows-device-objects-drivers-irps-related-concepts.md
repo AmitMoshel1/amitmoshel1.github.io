@@ -2,6 +2,8 @@
 layout: post
 title: The Basics of Windows Device Objects, Drivers, IRPs & Related Concepts
 date: 2024-07-13 22:16 +0200
+categories: [the-basics-of-windows-device-objects-drivers-irps-related-concepts]
+tags: [Reverse-Engineering, Security-Research, Driver-Development, Kernel-Mode, Windows-Internals, WinDbg, IDA-Pro]
 ---
 
 Hello everyone, in this article I’m going to go over the basics of Driver Development and explain in theory and in practice the basic components required to build a basic driver.
