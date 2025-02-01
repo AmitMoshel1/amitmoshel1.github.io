@@ -2,7 +2,7 @@
 layout: post
 title: Mysteries of the Windows Kernel Pt.2 - Thread Scheduling & CPU Internals
 date: 2024-03-02 22:14 +0200
-categories: [mysteries-of-the-windows-kernel]
+categories: [Mysteries Of The Windows Kernel]
 tags: [Reverse-Engineering, Security-Research, Kernel-Mode, Windows-Internals, CPU-Internals, WinDbg, IDA-Pro, CPU-Internals]
 ---
 

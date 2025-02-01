@@ -2,7 +2,7 @@
 layout: post
 title: Mysteries of the Windows Kernel Pt.3 — Memory Management & Address Translation
 date: 2024-03-30 23:32 +0200
-categories: [mysteries-of-the-windows-kernel]
+categories: [Mysteries Of The Windows Kernel]
 tags: [Reverse-Engineering, Security-Research, Kernel-Mode, Windows-Internals, CPU-Internals, WinDbg, IDA-Pro, Memory-Management]
 ---
 categories: [Reverse Engineering, Security Research, Kernel Mode, Windows Internals]
