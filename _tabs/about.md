@@ -6,8 +6,7 @@ order: 4
 
 ## About Me
 
-**Security Researcher & Reverse Engineer**  
-Specializing in Windows Internals, Kernel Development, and Hypervisor Research  
+I'm a **Security Researcher & Reverse Engineer** Specializing in Windows Internals, Kernel Development, and Hypervisor Research  
 
 ## Skills & Expertise  
 - Deep expertise in **Windows OS architecture**, including user-mode and kernel-mode mechanisms.  
