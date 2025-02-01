@@ -4,5 +4,14 @@ icon: fas fa-info-circle
 order: 4
 ---
 
-> Add Markdown syntax content to file `_tabs/about.md`{: .filepath } and it will show up on this page.
-{: .prompt-tip }
+**Security Researcher** and **Reverse Engineer** specializing in **Windows Internals**, **Kernel Development**, and **Hypervisor Research**.
+
+Skilled in:
+- Driver Development
+
+- Reverse Engineering
+
+- Vulnerability Research
+  
+  
+ **OSCP** certified and an author of articles related to Windows security and virtualization topics.
