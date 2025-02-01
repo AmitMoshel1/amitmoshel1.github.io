@@ -12,6 +12,5 @@ Skilled in:
 - Reverse Engineering
 
 - Vulnerability Research
-  
-  
+    
  **OSCP** certified and an author of articles related to Windows security and virtualization topics.
