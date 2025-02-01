@@ -4,13 +4,22 @@ icon: fas fa-info-circle
 order: 4
 ---
 
-Security Researcher and Reverse Engineer specializing in Windows Internals, Kernel Development, and Hypervisor Research.
+## About Me
 
-Skilled in:
-- **Kernel Mode Research & Development**
+**Security Researcher & Reverse Engineer**  
+Specializing in Windows Internals, Kernel Development, and Hypervisor Research  
 
-- **Reverse Engineering**
+## Skills & Expertise  
+- Deep expertise in **Windows OS architecture**, including user-mode and kernel-mode mechanisms.  
 
-- **Vulnerability Research**
-    
- **OSCP** certified and an author of articles related to Windows security and virtualization topics.
+- Skilled in **driver development**, with hands-on experience in writing and debugging Windows kernel drivers. 
+
+- Proficient in **reverse engineering** binaries using **IDA Pro, WinDbg, SysInternals**.
+
+- Conducts **vulnerability research** to analyze and exploit security flaws in Windows components. 
+ 
+- Experienced in **hypervisor security and virtualization**, focusing on debugging and attack surface analysis.  
+
+- **OSCP Certified Penetration Tester** with expertise in low-level exploitation.
+
+- **Author** of in-depth articles on Windows security, kernel internals, and virtualization topics.
