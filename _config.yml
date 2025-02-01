@@ -228,3 +228,6 @@ jekyll-archives:
 
 future: true
 
+include:
+  - About.md
+
