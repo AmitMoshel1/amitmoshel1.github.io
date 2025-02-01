@@ -2,7 +2,7 @@
 layout: post
 title: The Basics of Windows Device Objects, Drivers, IRPs & Related Concepts
 date: 2024-07-13 22:16 +0200
-categories: [the-basics-of-windows-device-objects-drivers-irps-related-concepts]
+categories: ["The Basics of Windows Device Objects, Drivers, IRPs & Related Concepts"]
 tags: [Reverse-Engineering, Security-Research, Driver-Development, Kernel-Mode, Windows-Internals, WinDbg, IDA-Pro]
 ---
 

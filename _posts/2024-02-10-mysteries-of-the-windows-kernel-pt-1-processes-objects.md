@@ -2,7 +2,7 @@
 layout: post
 title: Mysteries of the Windows Kernel Pt.1 - Processes & Objects
 date: 2024-02-10 22:14 +0200
-categories: [mysteries-of-the-windows-kernel]
+categories: [Mysteries Of The Windows Kernel]
 tags: [Reverse-Engineering, Security-Research, Kernel-Mode, Windows-Internals, WinDbg, IDA-Pro, Processes]
 ---
 
