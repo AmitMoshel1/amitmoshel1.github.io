@@ -85,16 +85,17 @@ The fields that reside in **VMCS** according to **intel developer manual**:
   
 - `Host-State area` - Processor state is loaded from the host-state area on **VM exits**.
   
-- `VM-Execution control fields` - These fields control processor behavior in **VMX non-root** operation. They determine in part the causes of `VMEXIT`.
+- `VM-Execution control fields` - A bitmask that hold fields that control processor behavior in **VMX non-root** operation. They determine in part the causes of `VMEXIT`.
   
-- `VMEXIT control fields` - These fields control `VMEXIT`.
+- `VM-EXIT control fields` - A bitmask that hold fields that control and determine `VMEXIT` behaviour.
   
-- `VMENTRY control fields` - These fields control `VMENTRY`.
+- `VM-ENTRY control fields` - A bitmask that hold fields that control and determine `VMENTRY` behaviour.
   
-- `VMEXIT information fields` - These fields receive information on **VM EXITs** and describe the cause and the nature of `VMEXIT`.
+- `VM-EXIT information fields` - Set of fields that hold information on the last **VMEXIT** and describe the cause and the nature of `VMEXIT`.
 
 
-The instruction that's being called to initiate the transition from **Root Partition** (or from Hypervisor level) to Child Partition is `VMENTRY`, and the instruction that's being called to initiate the transition from Child Partition to **Root Partition** (or to hypervisor) is `VMEXIT`.
+The instruction that's being called to initiate the transition from the **Hypervisor** (**VMX-Root operation**) to **Root/Child Partition** (**VMX Non-Root operation**) is `VMENTRY`, and the instruction that's being called to initiate the transition from **Root/Child Partition** Partition to the **Hypervisor** is `VMEXIT`.
+
 
 Each `VTL` has its own `VMCS` fields that reside in **Ring -1** to ensure execution state isolation between each `VTL` and safe transitions between Root and Child partitions.
 Interactions with `VMCS` is performed by the following **intel VT-x** instructions:
