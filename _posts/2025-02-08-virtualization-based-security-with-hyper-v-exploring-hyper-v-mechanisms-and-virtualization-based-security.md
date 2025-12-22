@@ -877,15 +877,17 @@ In line 20 and 21, we can see 2 atomic operations on these global pointers:
 The `_InterlockedCompareExchange64()` is an atomic function that in this case checks if the values of `ShvlpHandleMsrIntercept()` and `ShvlpHandleRegisterIntercept()` are 0, if so it fills them with the base address of `SkpgxInterceptMsr()` and `SkpgxInterceptRegister()` respectively. These 2 functions are the **“Secure Kernel Patch Guard”** handler for these **intercepts**.
 For example, let’s view the `SkpgxInterceptMsr()`: 
 
-![img-description](https://raw.githubusercontent.com/AmitMoshel1/images-for-articles/refs/heads/main/VBS-Article-images/image64.png)
+![img-description](https://raw.githubusercontent.com/AmitMoshel1/images-for-articles/refs/heads/main/VBS-Article-images/image68.png)
 
-![img-description](https://raw.githubusercontent.com/AmitMoshel1/images-for-articles/refs/heads/main/VBS-Article-images/image62.png)
-![img-description](https://raw.githubusercontent.com/AmitMoshel1/images-for-articles/refs/heads/main/VBS-Article-images/image63.png)
-![img-description](https://raw.githubusercontent.com/AmitMoshel1/images-for-articles/refs/heads/main/VBS-Article-images/image65.png)
+![img-description](https://raw.githubusercontent.com/AmitMoshel1/images-for-articles/refs/heads/main/VBS-Article-images/image69.png)
 
-The function obtains the **MSR** index that’s being written, and the value intended to be written in it, and also create an int variable that’s used to determine if the MSR is virtualized and its value can be updated using `ShvlSetVpRegister()`, I called this variable **“CanbeOverwrittenWithShvlSetVpRegister”**. After getting these values, a **“switch()`** statement is executed to determine the MSR index value and appropriately act on it.
+![img-description](https://raw.githubusercontent.com/AmitMoshel1/images-for-articles/refs/heads/main/VBS-Article-images/image70.png)
 
-The following MSRs are virtualized specifically per VP and can be modified through the `ShvlSetVpRegister()` function:
+![img-description](https://raw.githubusercontent.com/AmitMoshel1/images-for-articles/refs/heads/main/VBS-Article-images/image71.png)
+
+The function obtains the **MSR** index that’s being written, and the value intended to be written in it, and also create an int variable that’s used to determine if the MSR needs to be written through **`ShvlSetVpRegister()`** into the **Virtual Processor State**, I called this variable **`ShouldBeWrittenToVirtualProcessorState`**. After getting these values, a **`switch()`** statement is executed to determine the **MSR index** value and appropriately act on it.
+
+The following MSRs will be written to the **Virtual Processor State** through the `ShvlSetVpRegister()` function:
 - `IA32_INTERRUPT_SSP_TABLE_ADDR` (**0x6a8**) - holds the base address to the **Interrupt Shadow Stack Pointer** (**SSP**) table used in x64 architecture with `Intel CET` (**Control-Flow Enforcement Technology**). `Intel CET` helps prevent stack-based control-flow attacks by maintaining a shadow stack, which is a hardware level stack that can’t be modified, and holds a copy of the return address of the original stack. In each “return” instruction, the return address in the **“Shadow Stack”** is compared to the return value in the original stack. Each interrupt vector has an entry in this table, which specifies the **SSP** value to load upon an interrupt.
 
 - `IA32_XSS` (**0xDA0**) - Extended Supervisor State Mask: contains a state-component
@@ -928,18 +930,17 @@ The following MSRs will be written through `wrmsr` (`__writemsr()`) instruction:
   - **automatic thermal control**
   - **Turbo Mode in 64-bit mode.**
 
-- `IA32_PL2_SSP` (**0x6A6**) - holds the **CPL 2 Shadow Stack Pointer**.
+- `IA32_PL2_SSP` (**0x6A6**) - holds the CPL 2 Shadow Stack Pointer.
 
-- `HV_REGISTER_NAME` of **0x8008F** which is undocumented but my assumption it’s `HvX64RegisterApicFrequency` which holds the frequency of the **Virtual APIC** of the **VP**.
+- `HV_REGISTER_NAME` of **0x8008F** which is undocumented but my assumption it’s `HvX64RegisterApicFrequency` which holds the frequency of the Virtual APIC of the VP.
 
-- `HV_REGISTER_NAME` of **0x80090** which is undocumented but my assumption it’s `HvX64RegisterApicTscDeadline` which holds the **Timestamp Counter deadline** of 
-the **Virtual APIC**.
+- `HV_REGISTER_NAME` of **0x80090** which is undocumented but my assumption it’s `HvX64RegisterApicTscDeadline` which holds the Timestamp Counter deadline of 
+the `Virtual APIC`.
 
-The value-writing part is performed at the end of the function and the functionality of writing to the MSR is determined through a boolean value that is modified between **Virtualized MSR** (written through `ShvlSetVpRegister()` hypercall ) and **Non-Virtualized MSR** (written directly through `wrmsr` instruction):
+The actual value-writing part is performed at the end of the function and the functionality of writing the value is determined based on the `ShouldBeWrittenToVirtualProcessorState` boolean as we've just seen. If set to `true`, a call to **`ShvlSetVpRegiter()`** will be executed (which is a wrapper function in the **Secure Kernel** for the **`HvCallSetVpRegister()`** hypercall), which will write the MSR value to the **Virtual Processor State** of the VTL. If set to false, the value will be directly written to the Logical Processor through **`__writemsr()`** intrinsic.
 
-![img-description](https://raw.githubusercontent.com/AmitMoshel1/images-for-articles/refs/heads/main/VBS-Article-images/image66.png)
+![img-description](https://raw.githubusercontent.com/AmitMoshel1/images-for-articles/refs/heads/main/VBS-Article-images/image67.png)
 
-In `ShvlSetVpRegister()`, the **3rd argument** is the `HV_REGISTER_NAME` enum value that describes a **virtualized register** in which the value will be written to in the **Virtual Processor**:
 
 ```c++
 typedef enum _HV_REGISTER_NAME {
