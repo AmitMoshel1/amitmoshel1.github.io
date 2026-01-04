@@ -93,7 +93,6 @@ The fields that reside in **VMCS** according to **intel developer manual**:
   
 - `VM-EXIT information fields` - Set of fields that hold information on the last **VMEXIT** and describe the cause and the nature of `VMEXIT`.
 
-
 The instruction that's being called to initiate the transition from the **Hypervisor** (**VMX-Root operation**) to **Root/Child Partition** (**VMX Non-Root operation**) is `VMENTRY`, and the instruction that's being called to initiate the transition from **Root/Child Partition** Partition to the **Hypervisor** is `VMEXIT`.
 
 
@@ -109,31 +108,27 @@ Interactions with `VMCS` is performed by the following **intel VT-x** instructio
 
 ## SynIC - Synthetic Interrupt Controller
 
-The third component is a more complex topic and is Interrupt management in a virtualized environment. If you're unfamiliar with **Interrupt handling** in a normal execution environment then I highly recommend understanding it first before reading this section.
+The third component is a more complex topic and is Interrupt management in a virtualized environment.
+
 Each `VTL` has its own **Synthetic Interrupt Controller**, which is used locally within a `VTL` to transfer the interrupt into the OS.
 
 In a virtualized environment, there are 2 types of interrupts:
-- `Synthetic Interrupts` – **Virtual Interrupts** that are invoked from the **hypervisor**
+- `Synthetic Interrupts` – **Virtual Interrupts** that are invoked from the **hypervisor**.
   
-- `Physical Interrupts` – **Interrupts** that originally come from **physical devices**.
+- `Physical Interrupts` – **Interrupts** that originates from **physical devices**.
 
-To fully understand the interrupt handling implementation in **Hyper-V**, I'll go over each component involved in the process.
+The function responsible for initializing the **SynIC** in the **Secure Kernel** is **`ShvlpInitializeSynic()`**
 
-In the case of a **physical interrupt**, the first component involved in the interrupt management process is the physical device itself that sends an interrupt signal to the `I/O APIC` through its `IRQ` (**Interrupt Control Line**). 
+![alt text](https://raw.githubusercontent.com/AmitMoshel1/images-for-articles/refs/heads/main/VBS-Article-images/image72.png)
 
-The `I/O APIC` looks into its **internal redirection table** to correctly transfer the interrupt with additional information into the `Local APIC` of the correct Logical Processor.
+Currently in the **Secure Kernel**, there are 2 main **synthetic interrupts** handled:
+- **Secure Intercepts** - At vector **0xF0**, handled in the **`ShvlpInterceptHandler()`** function.
+- **Virtualized Timer Interrupts** - At vector **0x51**, handled in the **`ShvlpTimerHandler()`**.
 
-Next (and here is the twist), the `Local APIC` transfers execution into the hypervisor using a `VMEXIT` instruction. Within the Hypervisor space, there is `Synthetic Interrupt Controller` and is responsible for **virtualizing physical interrupts**.
+Information about these synthetic interrupts are saved within **Virtual MSRs** respsonsible for storing information related to the synthetic interrupts, such as their **vector number** and more : 
+- **HV_X64_MSR_SINT0** (**0x40000090**) -> Holds information about the **Secure Intercepts handler**.
 
-The "**Hypervisor's Synthetic Interrupt Controller**" has an **internal redirection table** which is consisted out of **interrupt descriptors** that looks like this:
-
-![img-description](https://raw.githubusercontent.com/AmitMoshel1/images-for-articles/refs/heads/main/VBS-Article-images/image4.png)
-
-<https://www.amazon.com/Windows-Internals-Part-2-7th/dp/0135462401>
-
-By resolving the correct **Virtual Vector**, **target VP** and **target VTL**, an event is being injected into the `VMCS` of the target `VTL`, which transfers execution into the `Synthetic Interrupt Controller` of the `VTL`. The `Synthetic Interrupt Controller` invokes the correct **interrupt** from the `Interrupt Dispatch Table` (`IDT`) of the OS.
-
-In a case of a **Synthetic Interrupt** which comes directly from the **Hypervisor**, the interrupt is directly being injected to the `SynIC` of the **target VP** and **target VTL**, and from.
+- **HV_X64_MSR_SINT1** (**0x40000091**) -> Holds information about the **Synthetic Timer** handler.
 
 One of the major uses of the **Synthetic Interrupt Controller** is to allow **inter-partition communication**. This is a mechanism that allows partition to transfer 2 types of data: 
 
@@ -184,6 +179,22 @@ typedef struct
 ```
 
 <https://learn.microsoft.com/en-us/virtualization/hyper-v-on-windows/tlfs/datatypes/hv_message>
+
+
+The second type of interrupts are **physical interrupts**. The idea of handling **physical interrupts** is highly complex and there are multiple ways of handling it, which in modern mechanisms are safely implemented by in **intel VT-d**.
+
+In an **extermely** simplified explanation, a device generates an **MSI/MSI-X** by issuing a memory write (**DMA** operation) to an interrupt remapping address. The **IOMMU** and **interrupt-remapping hardware** translate this interrupt according to hypervisor-configured ownership, including the **target partition**, **virtual processor**, and **VTL**.
+An example for a **physical interrupt descriptor** under **Hyper-V**:
+
+![img-description](https://raw.githubusercontent.com/AmitMoshel1/images-for-articles/refs/heads/main/VBS-Article-images/image4.png)
+
+<https://www.amazon.com/Windows-Internals-Part-2-7th/dp/0135462401>
+
+If hardware-assisted interrupt virtualization (**Virtual APIC** (**APICv**) / **posted interrupts**) is enabled and the target VP is running, the interrupt is delivered directly to the guest’s **virtual APIC** without causing a **VM-exit**.
+
+Otherwise, the processor triggers a **VM-exit**, and the hypervisor injects the interrupt into the appropriate virtual processor using **VM-entry Interruption Information field** within the **VMCS** of the **target VTL**.
+
+In both cases, the interrupt is delivered to the guest running in a target VTL. Since **VTL1** currently doesn't support physical interrupts, all of the physical interrupts are managed from **VTL0**.  
 
 ## Hypercalls
 
@@ -404,7 +415,7 @@ For that, an **"Intercept"** has come into play.
 
 First I'll start with the **VSM disabled**, and soon I'll go in-depth into how **"Intercepts"** are being handled in a VSM-enabled environment.
 
-Whenever one of the events above are attempted to be executed by a child partition, the hypervisor detects it and injects a `VMEXIT` instruction that will transfer execution into the hypervisor.
+Whenever one of the events above are attempted to be executed by a child partition, the hypervisor detects it and causes a `VM-Exit` that will transfer execution into the hypervisor.
 
 The hypervisor will determine the type of operation being performed and inject a **"Synthetic Interrupt"** (which as mentioned before, an interrupt that comes from the hypervisor itself) into the **Root Partition** at vector **0x30** in the **IDT** of the **root partition**.
 
