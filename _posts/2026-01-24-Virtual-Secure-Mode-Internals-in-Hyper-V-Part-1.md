@@ -499,7 +499,7 @@ The state of **HLAT** is managed on multiple fronts:
 2. **Software Level** - 
     - The **HVPT** paging structures are mapped in both in **VTL0** and **VTL1**. In **VTL0**, the **HVPT** paging structures are mapped as **Read-Only**, and in **VTL1** they are mapped as **Read+Write** privileges.
    ![alt text](https://raw.githubusercontent.com/AmitMoshel1/images-for-articles/refs/heads/main/VSM-Article-images/image-60.png)
-    <https://github.com/AaLl86/WindowsInternals/blob/master/Slides/Hypervisor-enforced%20Paging%20Translation%20-%20The%20end%20of%20non%20data-driven%20Kernel%20Exploits%20(Recon2024).pdf> 
+        <https://github.com/AaLl86/WindowsInternals/blob/master/Slides/Hypervisor-enforced%20Paging%20Translation%20-%20The%20end%20of%20non%20data-driven%20Kernel%20Exploits%20(Recon2024).pdf> 
     
     
     The **HVPT** paging structures are managed in **VTL-1** where each paging structure is structured as **NTEs** (**Normal Table Entry**).
@@ -667,7 +667,7 @@ The function first verifies that **`HardwareHvptEnabled`** field is set, and tha
 
 1. **User-Mode Executable** (**XU** bit within the **EPT**) - If the translation of the address specifies user mode (the **U/S** bit was set in every paging structure entry used to translate the linear address), the resulting Guest Physical Address is executable under **EPT** only if the **XU** bit (bit index **10**) is set in every EPT paging-structure entry used to translate the Guest Physical Address. This bit in the EPT is only relevant if the MBEC's enabled bit in the VM-Execution Control is set to 1.
 
-2. **Supervisor Executable** (**XS** bit within the **EPT**) - If the translation of the linear address specifies supervisor mode (the **U/S** bit was **clear** in the paging-structure entries used to translate the linear address), the resulting Guest Physical Address is executable under EPT only if the **XS** bit is set in every EPT paging-structure entry used to translate the Guest Physical Address. If the MBEC's enabled bit in the VM-Execution Control is disabled, this bit will be used as the **execute** bit for both user-mode and kernel-mode pages.
+2. **Supervisor Executable** (**XS** bit within the **EPT**) - If the translation of the address specifies supervisor mode (the **U/S** bit was **clear** in the paging-structure entries used to translate the linear address), the resulting Guest Physical Address is executable under EPT only if the **XS** bit is set in every EPT paging-structure entry used to translate the Guest Physical Address. If the MBEC's enabled bit in the VM-Execution Control is disabled, this bit will be used as the **execute** bit for both user-mode and kernel-mode pages.
 
 **MBEC** is enabled by setting the **"Mode-based execute control for EPT"** to **1** within the **Secondary Processor-Based VM-Execution Controls**:
 
