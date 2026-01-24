@@ -18,6 +18,7 @@ There are 2 reasons **Hyper-V** creates and manages the **Virtual Processor stat
 A list of shared and private registers:
 ![alt text](https://raw.githubusercontent.com/AmitMoshel1/images-for-articles/refs/heads/main/VSM-Article-images/image.png)
 
+
 2. The second reason, is that the VP state is saving the entire state of the VTL, including certain virtual registers that represent internal Hyper-V mechanism and are not included within the known VMCS strucure. For example, virtual registers that are part of Virtual Secure mode, which we'll soon see.
 
 To fully understand **VSM** and it's relation to **Virtual Processor state** we'll reverse the **`HvCallSetVpRegisters()`** hypercall.
