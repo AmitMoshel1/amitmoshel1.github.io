@@ -13,13 +13,13 @@ Before getting into **Virtual Secure Mode**, we first need to understand what is
 
 There are 2 reasons **Hyper-V** creates and manages the **Virtual Processor state** structure instead of relying only on **VMCS**:
 
-1. The VP state is used as an efficiency mechanism to share registers between VTLs during a **VTL Calls** and **VTL Returns**. There are a defined set of registers that are configured to be **shared** across **VTLs**, and other set of registers that are kept private.
+- The VP state is used as an efficiency mechanism to share registers between VTLs during a **VTL Calls** and **VTL Returns**. There are a defined set of registers that are configured to be **shared** across **VTLs**, and other set of registers that are kept private.
 
 A list of shared and private registers:
 ![alt text](https://raw.githubusercontent.com/AmitMoshel1/images-for-articles/refs/heads/main/VSM-Article-images/image.png)
 
 
-2. The second reason, is that the VP state is saving the entire state of the VTL, including certain virtual registers that represent internal Hyper-V mechanism and are not included within the known VMCS strucure. For example, virtual registers that are part of Virtual Secure mode, which we'll soon see.
+- The second reason, is that the VP state is saving the entire state of the VTL, including certain virtual registers that represent internal Hyper-V mechanism and are not included within the known VMCS strucure. For example, virtual registers that are part of Virtual Secure mode, which we'll soon see.
 
 To fully understand **VSM** and it's relation to **Virtual Processor state** we'll reverse the **`HvCallSetVpRegisters()`** hypercall.
 
@@ -489,8 +489,9 @@ The state of **HLAT** is managed on multiple fronts:
    - **HLAT Prefix Size** - The **HLAT Prefix Size** is a field in the **VMCS** that defines the **PLR** (**Protected Linear Range**), which is the range of addresses meant to be protected by **HVPT**. Checking the **HLAT Prefix Size** is the first step in the translation process. The **HLAT Prefix Size** stores the number of most significant bits that should be set to 1 in the address for being translated by **HLAT**. This field determines whether an address should be translated via **HVPT** or **CR3-rooted** page tables.
 
    - **Guest Paging-Verification (GPV)** + **EPT paging-write control (PW)** - 2 additional mechanisms that are available as part of **Intel VT-RP** (intel's Redirection-Protection, which holds under it: **HLAT**, **GPV**, **PW**):
-   - 1. **EPT paging-write control** (**bit index 2** within **Tertiary VM-Execution control**) is a performance optimization that comes with **HLAT** that allows setting **A/D** (**Access**/**Dirty**) bits on **HLAT Protected pages** without a need for **VMEXIT** even if the PTEs are protected as Read-Only. This is enabled by setting the **EPT paging-write control** bit to 1, and setting **PWA** (**Paging Write Access**) bit to 1 in the EPT paging structures. 
-   - 2. **Guest Paging-Verification (GPV)** - A mitigation that goes along with **HLAT** that verifies that each paging structure used during address translation comes from **HLAT's PLR**. This is enforced by setting the **VGP** (**Verify Guest Paging**) bit in the **EPT**. When set, each paging structure used during the address translation in the **EPT** will be checked for having the **PW** (**Paging-Write**) bit set within it.
+     - **EPT paging-write control** (**bit index 2** within **Tertiary VM-Execution control**) is a performance optimization that comes with **HLAT** that allows setting **A/D** (**Access**/**Dirty**) bits on **HLAT Protected pages** without a need for **VMEXIT** even if the PTEs are protected as Read-Only. This is enabled by setting the **EPT paging-write control** bit to 1, and setting **PWA** (**Paging Write Access**) bit to 1 in the EPT paging structures. 
+
+     -  **Guest Paging-Verification (GPV)** - A mitigation that goes along with **HLAT** that verifies that each paging structure used during address translation comes from **HLAT's PLR**. This is enforced by setting the **VGP** (**Verify Guest Paging**) bit in the **EPT**. When set, each paging structure used during the address translation in the **EPT** will be checked for having the **PW** (**Paging-Write**) bit set within it.
    
 2. **Software Level** - 
     - The **HVPT** paging structures are mapped in both in **VTL0** and **VTL1**. In **VTL0**, the **HVPT** paging structures are mapped as **Read-Only**, and in **VTL1** they are mapped as **Read+Write** privileges.
