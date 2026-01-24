@@ -5,8 +5,6 @@ categories: [Virtualization-Based-Security, Hyper-V]
 date: 2026-01-24 17:55 +0200
 ---
 
-# Virtual Secure Mode Internals in Hyper-V - Part 1
-
 ## Introduction to Virtual Processor State
 
 Before getting into **Virtual Secure Mode**, we first need to understand what is **Virtual Processor state**.
