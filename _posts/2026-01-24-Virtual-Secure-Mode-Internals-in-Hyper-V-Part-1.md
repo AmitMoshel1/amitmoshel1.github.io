@@ -127,6 +127,7 @@ In the **`HvWriteToVpRegisterHandler()`** there's a **switch/case** on the **HvR
 
 Note that there are **A LOT** of virtual registers handlers, so I'll cover only VSM registers handlers.
 
+---
 
 ## Virtual Secure Mode Registers
 
@@ -468,6 +469,8 @@ At **line 35**, there's a call to **`HvSetHLATVsmSupportBasedOnNewSecureConfigVa
 
 ![alt text](https://raw.githubusercontent.com/AmitMoshel1/images-for-articles/refs/heads/main/VSM-Article-images/image-105.png)
 
+---
+
 ## HLAT - Hypervisor Linear Address Translation
 
 **HLAT** (also known as **HVPT** by microsoft) is a hardware security feature that lets the hypervisor protect guest OS memory by enforcing its own **secure page tables**, mitigating **Remapping Attacks** and **Aliasing Attacks**. Microsoft officially added support for **HVPT** in **Hyper-V** Since **24H2**.
@@ -656,6 +659,7 @@ Which, if the conditions are met will invoke a function I named **`HvGetHLATStat
 
 The function first verifies that **`HardwareHvptEnabled`** field is set, and than continues to perform 2 **`VMREAD`** to **`HLAT_POINTER`** and **`HLAT_PREFIX_SIZE`**, and return these values 
 
+---
 
 ## MBEC - Mode Based Execution Control
 
@@ -777,3 +781,12 @@ The other thing (in **line 47** on the image below) that will happen is that the
 else (at **line 53**), **MBEC** will be disabled by unsetting the **`MbecEnabled`** field within the **shadow secure config VTL**, and the **Mode-based execute control for EPT** bit within the **Secondary Processor-Based VM-Execution Controls** will be set to **0**.
 
 That will be it for now, In the next part that I might do in the future, I'll reverse the handling of **Supervisor Shadow Stack**.
+
+---
+
+References:
+- <https://www.intel.com/content/www/us/en/developer/articles/technical/intel-sdm.html>
+
+- <https://learn.microsoft.com/en-us/virtualization/hyper-v-on-windows/tlfs/vsm>
+
+- <https://github.com/AaLl86/WindowsInternals/blob/master/Slides/Hypervisor-enforced%20Paging%20Translation%20-%20The%20end%20of%20non%20data-driven%20Kernel%20Exploits%20(Recon2024).pdf> 
