@@ -23,7 +23,8 @@ A list of shared and private registers:
 To fully understand **VSM** and it's relation to **Virtual Processor state** we'll reverse the **`HvCallSetVpRegisters()`** hypercall.
 
 The following is the function signature of **`HvCallSetVpRegisters()`** **Rep hypercall**.
-```C++
+
+```C
 HV_STATUS
 HvCallSetVpRegisters(
    _In_ HV_PARTITION_ID PartitionId,
@@ -151,7 +152,7 @@ According to microsoft's documentation, to make use of **Mode-based execution co
 
 This structure is partially documented, but I managed to fully reverse it (as much as I know) into the following structure:
 
-```C++
+```C
 struct _HV_REGISTER_VSM_VP_SECURE_VTL_CONFIG
 {
     UINT64 MbecEnabled : 1;                     // bit 0
@@ -168,7 +169,7 @@ struct _HV_REGISTER_VSM_VP_SECURE_VTL_CONFIG
 
 A virtual register used to determine certain **VSM Capabilities** and is constructed as the following:
 
-```C++
+```C
 struct HV_X64_REGISTER_VSM_CAPABILITIES // sizeof=0x8
 {
 unsigned __int64 RsvdZ : 46;
@@ -197,7 +198,7 @@ More on the Secure Intercepts topic can be found here:
 
 The **`HvX64RegisterCrInterceptControl`** is a bitmask that determines to which operation an Intercept will be invoked to, and is constructed as the following:
 
-```C++
+```C
 typedef union
 {
     UINT64 AsUINT64;
@@ -246,7 +247,7 @@ A **read only virtual register** that's **shared across all VTLs**. This **virtu
 
 **`HvRegisterVsmVpStatus`** is constructed as the following:
 
-```C++
+```C
 struct HV_REGISTER_VSM_VP_STATUS
 {
     UINT64 ActiveVtl : 4;
@@ -273,7 +274,7 @@ The **internal value of VsmVpStatus field within the VTL is another internal bit
 
 A **C** function that resolves the known **VsmVpStatus** value:
 
-```C++
+```C
 ULONG64 VsmVpStatusTranslator(BYTE InternalVtlVsmVpStatus, DWORD ActiveVtlBitMask, BYTE CurrentVtlNumber)
 {
 	return CurrentVtlNumber & 0xF | (0x10 * (InternalVtlVsmVpStatus & 1 | ((ActiveVtlBitMask & 3) << 12)));
@@ -286,7 +287,7 @@ A virtual register that holds **offsets** from the **hypercall page** base addre
 
 **`HvRegisterVsmCodePageOffsets`** is constructed as the following:
 
-```C++
+```C
 struct HV_REGISTER_VSM_CODE_PAGE_OFFSETS
 {
     UINT64 VtlCallOffset : 12;
@@ -318,7 +319,7 @@ A virtual register used to **configure partition-wide VSM attributes**. There is
 
 Every VTL can modify its own instance of **`HV_REGISTER_VSM_PARTITION_CONFIG`**, as well as instances for lower VTLs. VTLs may not modify this register for higher VTLs.
 
-```C++
+```C
 struct HV_REGISTER_VSM_PARTITION_CONFIG
 {
     UINT64 EnableVtlProtection : 1;
@@ -355,7 +356,7 @@ The **DenyLowerVtlStartup** flag controls if a **virtual processor** may be star
 
 This register provides information about which VTLs have been enabled for the partition, which VTLs have **MBEC** enabled, as well as the maximum VTL allowed.
 
-```C++
+```C
  struct HV_REGISTER_VSM_PARTITION_STATUS
 {
     UINT64 EnabledVtlSet : 16;
@@ -394,7 +395,7 @@ secure config in **`HvRegisterVsmVpSecureConfigVtlX`** from the **`HvRegisterNam
 
 For example:
 
-```C++
+```C
 HvRegisterVsmVpSecureConfigVtl1 = 0xD0011
 ```
 
@@ -444,7 +445,7 @@ In order to restore it to the original value, we'll see how it's retreived from 
 
 which can be simplified into the following function:
 
-```C++
+```C
 ULONG64 GetSecureConfigValue(BYTE BaseSecureConfigValue, DWORD IsTlbLockedSet, BYTE VsmVtlNumber) 
 {
     /*
@@ -560,7 +561,7 @@ Next, at **line 26**, the function reads the new secure config internal value (i
 This checks from the internal value whether the `HvptEnabled` bit is set.
 
 Let's view the secure config VTL structure once again:
-```C++
+```C
 struct _HV_REGISTER_VSM_VP_SECURE_VTL_CONFIG
 {
     UINT64 MbecEnabled : 1;                     // bit 0
@@ -573,7 +574,7 @@ struct _HV_REGISTER_VSM_VP_SECURE_VTL_CONFIG
 
 To verify the the check is actually against the `HvptEnabled` at index 3, we'll do the following operation:
 
-```C++
+```C
 
 ULONG64 GetSecureConfigValue(DWORD BaseSecureConfigValue, DWORD IsTlbLockedSet, BYTE VsmVtlNumber) 
 {
@@ -747,7 +748,7 @@ The function starts by performing multiple checks that affect the value of a boo
 
 This variable takes affect in the following line:
 
-```C++
+```C
 LOBYTE(NewVsmVpStatus) = (2 * IsHardwareMbecSupported) | VsmVpStatus & 0xFD
 ```
 
