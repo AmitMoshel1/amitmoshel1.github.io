@@ -166,7 +166,7 @@ struct _HV_REGISTER_VSM_VP_SECURE_VTL_CONFIG
 
 ---
 
-#### 2. **`HvRegisterVsmCapabilities`**:
+#### 2. **`HvRegisterVsmCapabilities`**
 
 A virtual register used to determine certain **VSM Capabilities** and is constructed as the following:
 
@@ -187,7 +187,7 @@ unsigned __int64 Dr6Shared : 1;
 - **DenyLowerVtlStartup** - Indicates to the guest whether a **VTL** can deny a **VP reset** by a **lower VTL**.
 
 ---
-#### 3. **`HvX64RegisterCrInterceptControl`**:
+#### 3. **`HvX64RegisterCrInterceptControl`**
 
 A virtual registers that enables **Secure Register Intercepts**. **Secure Intercepts** is one of the strongest features in **Virtualization Based Security**.
 
@@ -244,7 +244,7 @@ For example, if bit **20** is set in **`HvX64RegisterCrInterceptCr4Mask`**. Any 
 
 ---
 
-### 4. **`HvRegisterVsmVpStatus`**:
+#### 4. **`HvRegisterVsmVpStatus`**
 A **read only virtual register** that's **shared across all VTLs**. This **virtual register** is a **per-VP** register, meaning each **virtual processor** maintains its own instance. The register provides information about which **VTLs** have been **enabled**, which is **active**, as well as the whether **MBEC** is active on a **Virtual Processor**.
 
 **`HvRegisterVsmVpStatus`** is constructed as the following:
@@ -284,7 +284,7 @@ ULONG64 VsmVpStatusTranslator(BYTE InternalVtlVsmVpStatus, DWORD ActiveVtlBitMas
 ```
 
 ---
-### 5. `HvRegisterVsmCodePageOffsets`:
+#### 5. **`HvRegisterVsmCodePageOffsets`**
 A virtual register that holds **offsets** from the **hypercall page** base address (which is mapped both in hyper-v and in guest partitions) to **VTL Call** and **VTL Return** assembly stubs and is used when **VTL-Call** and **VTL-Return** operations. This is a **read-only** and **partition-wide** register, with a separate instance per-VTL.
 
 **`HvRegisterVsmCodePageOffsets`** is constructed as the following:
@@ -315,7 +315,7 @@ In the **Secure Kernel**, the  **`ShvlpInitializeVsmCodeArea()`** function is re
 
 ---
 
-### 6. **`HvRegisterVsmPartitionConfig`**
+#### 6. **`HvRegisterVsmPartitionConfig`**
 
 A virtual register used to **configure partition-wide VSM attributes**. There is one instance of this register for each VTL (greater than 0) on every partition.
 
@@ -352,7 +352,7 @@ The **DenyLowerVtlStartup** flag controls if a **virtual processor** may be star
 
 ---
 
-### 7. **`HvRegisterVsmPartitionStatus`**
+#### 7. **`HvRegisterVsmPartitionStatus`**
 
 **`HvRegisterVsmPartitionStatus`** is a **per-partition read-only** register that is **shared** across all VTLs.
 
