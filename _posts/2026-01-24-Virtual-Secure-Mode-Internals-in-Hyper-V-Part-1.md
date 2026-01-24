@@ -496,12 +496,12 @@ The state of **HLAT** is managed on multiple fronts:
     <https://github.com/AaLl86/WindowsInternals/blob/master/Slides/Hypervisor-enforced%20Paging%20Translation%20-%20The%20end%20of%20non%20data-driven%20Kernel%20Exploits%20(Recon2024).pdf> 
     
     
-        The **HVPT** paging structures are managed in **VTL-1** where each paging structure is structured as **NTEs** (**Normal Table Entry**).
+    The **HVPT** paging structures are managed in **VTL-1** where each paging structure is structured as **NTEs** (**Normal Table Entry**).
         
-        **NTE** is a structure within **VTL-1** that was initially used to track the state of **private pages** in **VTL0** from **VTL1** (private pages being pages that are accessible through **private PTEs**, and not prototype PTEs used for section objects).
+    **NTE** is a structure within **VTL-1** that was initially used to track the state of **private pages** in **VTL0** from **VTL1** (private pages being pages that are accessible through **private PTEs**, and not prototype PTEs used for section objects).
 
-        ![alt text](https://raw.githubusercontent.com/AmitMoshel1/images-for-articles/refs/heads/main/VSM-Article-images/image-61.png)
-        <https://github.com/AaLl86/WindowsInternals/blob/master/Slides/Hypervisor-enforced%20Paging%20Translation%20-%20The%20end%20of%20non%20data-driven%20Kernel%20Exploits%20(Recon2024).pdf> 
+    ![alt text](https://raw.githubusercontent.com/AmitMoshel1/images-for-articles/refs/heads/main/VSM-Article-images/image-61.png)
+    <https://github.com/AaLl86/WindowsInternals/blob/master/Slides/Hypervisor-enforced%20Paging%20Translation%20-%20The%20end%20of%20non%20data-driven%20Kernel%20Exploits%20(Recon2024).pdf> 
 
     - In Hyper-V, the **HV_VTL** structure holds under it multiple fields take parts in configuring **HLAT** (The names of the fields are given from my reversing):
       - **`HardwareHvptEnabled`** - A boolean field that indicates whether **HLAT** is set as enabled on the **Tertiary VM-Execution Control** of the **VTL** (by setting the **"Enable HLAT"** bit).
