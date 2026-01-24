@@ -138,7 +138,7 @@ Here are some of the **Virtual Processor registers** related to **Virtual Secure
 ![alt text](https://raw.githubusercontent.com/AmitMoshel1/images-for-articles/refs/heads/main/VSM-Article-images/image-23.png)
 
 ---
-### 1. **`HvRegisterVsmVpSecureConfigVtl`**
+#### 1. **`HvRegisterVsmVpSecureConfigVtl`**
 
 The **`HvRegisterVsmVpSecureConfigVtl`** virtual registers are used to determine a **VSM configuration** for **each VTL**. Some of the mechanisms configured from this register is **MBEC** (**Mode-Based Execution Control**) , **Supervisor Shadow Stack** (**KCET**) and **HLAT** (**Hypervisor-Managed Linear Address Translation**). It's undocumented that both **HLAT** and **KCET** are fields in this virtual register, but we'll soon see it when reversing some of the functions.
 
@@ -165,7 +165,7 @@ struct _HV_REGISTER_VSM_VP_SECURE_VTL_CONFIG
 
 ---
 
-### 2. **`HvRegisterVsmCapabilities`**:
+#### 2. **`HvRegisterVsmCapabilities`**:
 
 A virtual register used to determine certain **VSM Capabilities** and is constructed as the following:
 
@@ -184,8 +184,9 @@ unsigned __int64 Dr6Shared : 1;
 - **MbecVtlMask** - Indicates to the guest the **VTLs** for which **MBEC** can be enabled.
 
 - **DenyLowerVtlStartup** - Indicates to the guest whether a **VTL** can deny a **VP reset** by a **lower VTL**.
+
 ---
-### 3. **`HvX64RegisterCrInterceptControl`**:
+#### 3. **`HvX64RegisterCrInterceptControl`**:
 
 A virtual registers that enables **Secure Register Intercepts**. **Secure Intercepts** is one of the strongest features in **Virtualization Based Security**.
 
