@@ -133,7 +133,7 @@ Note that there are **A LOT** of virtual registers handlers, so I'll cover only 
 
 As said before, one of the reasons for having a **Virtual Processor State** (**for each VTL**) is to have a complete picture about the **VTL execution state**, including states related to internal **Hyper-V** mechanisms that aren't tracked or implemented on the hardware side.
 
-Some the interesting registers are the ones related to **VSM** (**Virtual Secure Mode**).
+Some of the interesting registers are the ones related to **VSM** (**Virtual Secure Mode**).
 
 Here are some of the **Virtual Processor registers** related to **Virtual Secure Mode**:
 
